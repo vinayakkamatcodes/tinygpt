@@ -3,9 +3,13 @@ import time
 import torch
 import torch.nn as nn
 
-import config
-from model import GPTLanguageModel
-from data_loader import get_batch
+from configs import config
+from src.model import GPTLanguageModel
+from src.data_loader import get_batch
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+CHECKPOINT_DIR = PROJECT_ROOT / "checkpoints"
+CHECKPOINT_DIR.mkdir(exist_ok=True)
 
 
 # ==========================================
@@ -163,7 +167,7 @@ torch.save(
             "block_size": config.BLOCK_SIZE
         }
     },
-    "gpt_checkpoint.pt"
+    CHECKPOINT_DIR / "gpt_checkpoint.pt"
 )
 
 
@@ -176,7 +180,7 @@ elapsed = time.perf_counter() - start_time
 print("\n========== TRAINING SUMMARY ==========")
 
 print("Training iterations:", MAX_ITERS)
-print("Checkpoint saved: gpt_checkpoint.pt")
+print("Checkpoint saved:", CHECKPOINT_DIR / "gpt_checkpoint.pt")
 
 print(
     f"Total training time: {elapsed:.2f} seconds"

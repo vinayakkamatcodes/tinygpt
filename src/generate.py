@@ -1,9 +1,12 @@
 
 import torch
 from tokenizers import Tokenizer
+from configs import config
+from src.model import GPTLanguageModel
 
-import config
-from model import GPTLanguageModel
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 # ==========================================
@@ -14,10 +17,11 @@ device = torch.device(
     config.DEVICE if torch.cuda.is_available() else "cpu"
 )
 
-tokenizer = Tokenizer.from_file("tokenizer.json")
-
+tokenizer = Tokenizer.from_file(
+    str(PROJECT_ROOT / "tokenizer" / "tokenizer.json")
+)
 checkpoint = torch.load(
-    "gpt_checkpoint.pt",
+    PROJECT_ROOT / "checkpoints" / "gpt_checkpoint.pt",
     map_location=device,
     weights_only=True
 )
